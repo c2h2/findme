@@ -29,6 +29,28 @@ class Findme
     end
   end
 
+  def self.discover 
+    res = `avahi-browse -arpt`
+    services = []
+    lines = res.split("\n")
+    lines.each do |line|
+      if line[0] == "="
+        elems=line.split(";")
+        as = AvahiService.new
+        as.eth      = elems[1]
+        as.ipv4     = elems[2]
+        as.hosttxt  = elems[3]
+        as.service  = elems[4]
+        as.hostname = elems[6]
+        as.ip       = elems[7]
+        as.port     = elems[8]
+        as.txt      = elems[9]
+        services << as
+      end
+    end
+    services
+  end
+
   #register a new service to the folder
   def self.register service_name,  port, type = '_tcp'
     xml = '<?xml version="1.0" standalone=\'no\'?><!--*-nxml-*-->
@@ -66,5 +88,10 @@ class Findme
   def self.mac_short
     self.mac.split(":").join("")
   end
+
+end
+
+class AvahiService
+  attr_accessor :eth, :ipv4, :ip, :hosttxt, :hostname, :port, :txt, :service
 
 end
