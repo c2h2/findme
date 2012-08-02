@@ -1,0 +1,10 @@
+module Findme
+  AVAHI_SERVICE_DIR = "/etc/avahi/services/"
+  AVAHI_BROWSE      = "/usr/bin/avahi-browse"
+  
+
+end
+
+require 'findme/findme'
+
+puts Findme.services
