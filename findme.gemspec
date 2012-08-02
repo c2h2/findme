@@ -1,11 +1,17 @@
-Gem::Specification.new do |s|
-  s.name        = 'findme'
-  s.version     = '0.0.0'
-  s.date        = '2012-08-02'
-  s.summary     = "Findme"
-  s.description = "find neighborhood host and services."
-  s.authors     = ["Yiling Cao"]
-  s.email       = 'yiling.cao@gmail.com'
-  s.files       = ["lib/findme.rb"]
-  s.homepage    = 'https://github.com/c2h2/findme'
+# -*- encoding: utf-8 -*-
+require File.expand_path('../lib/findme/version', __FILE__)
+
+Gem::Specification.new do |gem|
+  gem.authors       = ["c2h2"]
+  gem.email         = ["yiling.cao@gmail.com"]
+  gem.description   = %q{TODO: Write a gem description}
+  gem.summary       = %q{TODO: Write a gem summary}
+  gem.homepage      = ""
+
+  gem.files         = `git ls-files`.split($\)
+  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.name          = "findme"
+  gem.require_paths = ["lib"]
+  gem.version       = Findme::VERSION
 end
