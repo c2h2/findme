@@ -6,7 +6,7 @@ Find neighborhood host and services. fineme uses `avahi-deamon` and `avahi-brows
 
 Install
 -------
-    sudo apt-get install avahi-utils
+    sudo apt-get install avahi-utils avahi-daemon libnss-mdns
     gem install findme
     
 Example
