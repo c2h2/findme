@@ -1,3 +1,4 @@
-require 'findme'
+require 'findme.rb'
 
-Findme.register "findme", 1337
+Findme.cleanup
+Findme.register "findme", 1337 

@@ -10,7 +10,7 @@ class Findme
     files = files_with_path.map{|fwp| fwp.split("/").last}
   end
 
-  #clean up all the services this gem registered.
+  #clean up all the services this gem registered. should be called by user to clean up unused services.
   def self.cleanup
     findme_services = []
     files_with_path = Dir.glob(AVAHI_SERVICE_DIR + "*.service")
@@ -27,6 +27,47 @@ class Findme
       puts "Removing #{fs}"
       File.delete fs
     end
+  end
+  
+  def self._get_startup_time str
+    begin
+      pairs = str.strip.split(" ")
+      pairs.each do |p|
+        kv=p.strip.split("=")
+        if kv[0] == "\"findme_startup_time"
+          return kv[0].to_i
+        end
+      end
+    rescue Exception => e
+      # do nothing or if you want to debug: puts e
+    end
+    nil
+  end
+
+  def self.discover_only_earliest
+    services = discover
+    h = {}
+    h_out={}
+    
+    #construct the hash, group the services of the same name
+    services.each do |s|
+      if h[s.service].nil?
+        h[s.service]=[]
+      else
+        #existing hash, do nothing
+      end
+      h[s.service] << s
+    end  
+
+    h.each do |k, v|
+      if (_get_startup_time v[0].txt).nil?
+        #cant find the earliest time, just return the first one.
+      else
+        v.sort! {|x,y| _get_startup_time(x.txt) <=> _get_startup_time(y.txt) }
+      end
+      h_out[k]=v[0]
+    end
+    h_out
   end
 
   def self.discover 
@@ -52,19 +93,22 @@ class Findme
   end
 
   #register a new service to the folder
-  def self.register service_name,  port, type = '_tcp'
+  def self.register service_name,  port, txt="", type = '_tcp', protocol="ipv4"
+    txt = ("findme_startup_time=#{Time.now.to_i.to_s} " + txt).strip
     xml = '<?xml version="1.0" standalone=\'no\'?><!--*-nxml-*-->
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 
 <!-- findme generated -->
-<!-- This file is part of udisks -->
+<!-- This file is part of '+ service_name + '} -->
 
 <service-group>
   <name replace-wildcards="yes">%h</name>
 
-  <service>
+  <service protocol="' + protocol + '">
+    
     <type>'+ "_#{service_name}.#{type}" +'</type>
-    <port>' + port.to_s + '</port>
+    <port>'+ port.to_s + '</port>
+    <txt-record>' + txt.to_s + '</txt-record>
   </service>
 </service-group>'
 
