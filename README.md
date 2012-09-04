@@ -10,6 +10,7 @@ Install
     gem install findme
     
 Enable normal user to use this gem (first time):
+
     sudo chmod a+w /etc/avahi/services/
     
 Example
