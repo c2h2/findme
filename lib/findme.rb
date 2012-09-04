@@ -65,10 +65,37 @@ class Findme
       else
         v.sort! {|x,y| _get_startup_time(x.txt) <=> _get_startup_time(y.txt) }
       end
-      h_out[k]=v[0]
+      h_out[k]=v.last #fix a bug here.
     end
     h_out
   end
+
+  def self.discover_only_latest
+    services = discover
+    h = {}
+    h_out={}
+
+    #construct the hash, group the services of the same name
+    services.each do |s|
+      if h[s.service].nil?
+        h[s.service]=[]
+      else
+        #existing hash, do nothing
+      end
+      h[s.service] << s
+    end
+
+    h.each do |k, v|
+      if (_get_startup_time v[0].txt).nil?
+        #cant find the earliest time, just return the first one.
+      else
+        v.sort! {|x,y| _get_startup_time(x.txt) <=> _get_startup_time(y.txt) }
+      end
+      h_out[k]=v.first #latest registerd.
+    end
+    h_out
+  end
+
 
   def self.discover 
     res = `avahi-browse -arpt`

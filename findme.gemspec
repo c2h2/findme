@@ -4,8 +4,8 @@ require File.expand_path('../lib/findme/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["c2h2"]
   gem.email         = ["yiling.cao@gmail.com"]
-  gem.description   = "find neighborhood host and services."
-  gem.summary       = "find neighborhood host and services."
+  gem.description   = "find neighborhood host and services with avahi / avahi-daemon. run this for the first time to allow normal user to register services `sudo chmod a+w /etc/avahi/services/`"
+  gem.summary       = "find neighborhood host and services with avahi / avahi-daemon."
   gem.homepage      = "https://github.com/c2h2/findme"
 
   gem.files         = `git ls-files`.split($\)
