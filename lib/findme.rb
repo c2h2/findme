@@ -1,4 +1,4 @@
-class Findme
+module Findme
  
   AVAHI_SERVICE_DIR = "/etc/avahi/services/"
   AVAHI_BROWSE      = "/usr/bin/avahi-browse"
@@ -96,6 +96,15 @@ class Findme
     h_out
   end
 
+  def self.discover_service(service, ip=nil)
+    services = discover
+
+    result = services.detect {|x| x.service == "_#{service}._tcp" && x.ip == ip}
+    return result if result #here we choose best match if previous is this ip
+    #todo, using other factor to determine rank algorithm
+    return services.detect {|x| x.service == "_#{service}._tcp"}[0]
+  end
+
 
   def self.discover 
     res = `avahi-browse -arpt`
@@ -164,5 +173,9 @@ end
 
 class AvahiService
   attr_accessor :eth, :ipv4, :ip, :hosttxt, :hostname, :port, :txt, :service
+
+  def ip_and_port
+    [ip, port]
+  end
 
 end
