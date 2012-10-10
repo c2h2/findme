@@ -1,9 +1,9 @@
 module Findme
- 
+
   AVAHI_SERVICE_DIR = "/etc/avahi/services/"
   AVAHI_BROWSE      = "/usr/bin/avahi-browse"
 
- 
+
   #return all the services running by avahi
   def self.services
     files_with_path = Dir.glob(AVAHI_SERVICE_DIR + "*.service")
@@ -28,7 +28,7 @@ module Findme
       File.delete fs
     end
   end
-  
+
   def self._get_startup_time str
     begin
       pairs = str.strip.split(" ")
@@ -48,7 +48,7 @@ module Findme
     services = discover
     h = {}
     h_out={}
-    
+
     #construct the hash, group the services of the same name
     services.each do |s|
       if h[s.service].nil?
@@ -57,7 +57,7 @@ module Findme
         #existing hash, do nothing
       end
       h[s.service] << s
-    end  
+    end
 
     h.each do |k, v|
       if (_get_startup_time v[0].txt).nil?
@@ -112,7 +112,7 @@ module Findme
   end
 
 
-  def self.discover 
+  def self.discover
     res = `avahi-browse -arpt`
     services = []
     lines = res.split("\n")
@@ -147,7 +147,7 @@ module Findme
   <name replace-wildcards="yes">%h</name>
 
   <service protocol="' + protocol + '">
-    
+
     <type>'+ "_#{service_name}.#{type}" +'</type>
     <port>'+ port.to_s + '</port>
     <txt-record>' + txt.to_s + '</txt-record>
@@ -170,7 +170,7 @@ module Findme
     candidates = lines.map{|l| re.match( l )[1] rescue nil }.compact
     @mac_address = candidates.first
   end
-  
+
   def self.mac_short
     self.mac.split(":").join("")
   end
@@ -182,6 +182,10 @@ class AvahiService
 
   def ip_and_port
     [ip, port]
+  end
+
+  def inspect
+    "#<eth: #{eth}, ipv4: #{ipv4}, ip: #{ip}, hosttxt: #{hosttxt}, hostname: #{hostname}, port: #{port}, txt: #{txt}, service: #{service}>"
   end
 
 end
