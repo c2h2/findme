@@ -105,6 +105,12 @@ module Findme
     return services.detect {|x| x.service == "_#{service}._tcp"}[0]
   end
 
+  def self.discover_services(service)
+    services = discover
+
+    result = services.select {|x| x.service == "_#{service}._tcp" }
+  end
+
 
   def self.discover 
     res = `avahi-browse -arpt`
