@@ -157,6 +157,16 @@ module Findme
     File.open(AVAHI_SERVICE_DIR  + service_name + ".service", "w" ){|f| f.write xml}
   end
 
+  # Unregister a service, just remove .service file from avahi service directory.
+  # result: BOOLEAN, In most cases we don't care it.
+  def self.unregister service_name
+    service_file = AVAHI_SERVICE_DIR + service_name + ".service"
+    File.delete service_file if File.exist? service_file
+    true
+  rescue # Maybe can't delete target file by permission.
+    false
+  end
+
   #find the mac address
   def self.mac
     return @mac_address if defined? @mac_address
