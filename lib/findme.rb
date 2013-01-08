@@ -108,7 +108,7 @@ module Findme
   def self.discover_services(service)
     services = discover
 
-    result = services.detect {|x| x.service == "_#{service}._tcp" }
+    result = services.select {|x| x.service == "_#{service}._tcp" }
   end
 
 
