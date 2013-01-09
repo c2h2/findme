@@ -161,9 +161,11 @@ module Findme
   # result: BOOLEAN, In most cases we don't care it.
   def self.unregister service_name
     service_file = AVAHI_SERVICE_DIR + service_name + ".service"
-    File.delete service_file if File.exist? service_file
-    true
-  rescue # Maybe can't delete target file by permission.
+    if File.exist? service_file
+      File.delete service_file
+      return true
+    end
+  rescue # Errno::EACCES: Permission denied
     false
   end
 
