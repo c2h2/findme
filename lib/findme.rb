@@ -112,10 +112,16 @@ module Findme
   end
 
 
-  def self.discover
-    res = `avahi-browse -arpt`
+  def self.discover custom_cmd=nil
+
+    if custom_cmd.nil?
+      res = `avahi-browse -arpt`
+    else
+      res = `#{custom_cmd}`
+    end
+
     services = []
-    lines = res.split("\n")
+    lines = res.scan(/\S+/)
     lines.each do |line|
       if line[0] == "="
         elems=line.split(";")
