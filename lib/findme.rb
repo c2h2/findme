@@ -142,7 +142,7 @@ module Findme
 
   #register a new service to the folder
   def self.register service_name,  port, txt="", type = '_tcp', protocol="ipv4"
-    txt = ("findme_startup_time=#{Time.now.to_i.to_s} " + txt).strip
+    txt = ("findme_startup_time=#{Time.now.to_i.to_s}#" + txt).strip
     xml = '<?xml version="1.0" standalone=\'no\'?><!--*-nxml-*-->
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 
