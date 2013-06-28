@@ -1,3 +1,4 @@
+require 'findme/version'
 module Findme
 
   AVAHI_SERVICE_DIR = "/etc/avahi/services/"
